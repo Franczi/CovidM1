@@ -11,6 +11,8 @@ namespace Module1Registration.Model
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int? Age { get; set; }
+        public string? Email { get; set; }
         public DateTime TestDate { get; set; }
+
     }
 }
