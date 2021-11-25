@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Identity.Client;
 
 namespace CovidAppClientModule
 {
@@ -8,7 +10,18 @@ namespace CovidAppClientModule
     {
         static async Task Main(string[] args)
         {
-            ClientService service = new ClientService("https://localhost:5001/", new HttpClient());
+           //TODO
+           //add clientId, tenantId, secret token
+            var app = ConfidentialClientApplicationBuilder.Create("") // client id
+            .WithAuthority("") // tenant id
+            .WithClientSecret("")
+            .Build();
+            
+            var tokenClient = app.AcquireTokenForClient(new[] { "" });
+            var result = await tokenClient.ExecuteAsync();
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse($"Bearer {result.AccessToken}");
+            ClientService service = new ClientService("https://localhost:5001/", httpClient);
 
             _ = service.CreatePatientAsync(new Patient
             {
@@ -20,9 +33,9 @@ namespace CovidAppClientModule
                 TestDate = DateTimeOffset.Now
             });
 
-            var patients= await service.GetAllPatientsAsync();
+            var patients = await service.GetAllPatientsAsync();
 
-            foreach(var item in patients)
+            foreach (var item in patients)
             {
                 Console.WriteLine(item.FirstName + " " + item.LastName);
             }

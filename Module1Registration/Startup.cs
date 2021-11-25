@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -5,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Module1Registration.Model;
 using Module1Registration.Services;
@@ -44,7 +46,20 @@ namespace Module1Registration
 
             services.AddScoped<MessagesService>();
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://login.microsoftonline.com/9a4e0b3b-5d07-44bb-9d11-58207b2896a9/v2.0/"; // TenantId
+                options.Audience = "api://eaca2605-e312-4220-813d-97af4ebe2595"; // ClientID
+                options.IncludeErrorDetails = true;
+                options.TokenValidationParameters.ValidateIssuer = false;
+            });
+
+            IdentityModelEventSource.ShowPII = true;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +76,7 @@ namespace Module1Registration
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
