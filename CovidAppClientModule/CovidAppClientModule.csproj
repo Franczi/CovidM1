@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <OpenApiReference Include="..\swagger.json" CodeGenerator="NSwagCSharp" Namespace="CovidAppClientModule" ClassName="ClientService" Link="OpenAPIs\swagger.json" />
+    <OpenApiReference Include="..\swagger.json" CodeGenerator="NSwagCSharp" Namespace="CovidAppClientModule" ClassName="CovidAppClientModule" Link="OpenAPIs\swagger.json" />
   </ItemGroup>
 
   <ItemGroup>

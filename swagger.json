@@ -91,6 +91,19 @@
         }
       }
     },
+    "/api/Patients/invalid": {
+      "post": {
+        "tags": [
+          "Patients"
+        ],
+        "operationId": "Invalid",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [

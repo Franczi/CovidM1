@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Module1Registration.Model;
 using Module1Registration.Services;
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.IO;
@@ -29,6 +30,7 @@ namespace Module1Registration
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationInsightsTelemetry();
             services.AddDbContext<PatientsContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
@@ -83,6 +85,7 @@ namespace Module1Registration
             {
                 endpoints.MapControllers();
             });
+            app.UseSerilogRequestLogging();
         }
     }
     public class DefaultOperationIdFilter : IOperationFilter

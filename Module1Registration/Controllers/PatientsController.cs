@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Module1Registration.Model;
 using Module1Registration.Services;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,6 +43,12 @@ namespace Module1Registration.Controllers
             await _service.sendMessage(new MessagesService.MessagePayload { EventName = "PatientCreated", PatientEmail = patient.Email });
             
             return Created($"api/patients/{patient.Id}",patient);
+        }
+
+        [HttpPost("invalid")]
+        public void Invalid()
+        {
+            throw new InvalidOperationException("Kontrolowany wyjątek aplikacji");
         }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,7 @@ namespace CovidNotifications
             });
             services.AddSingleton<MessagesConsumer>();
             services.AddSingleton<EmailService>();
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +60,7 @@ namespace CovidNotifications
                 endpoints.MapControllers();
             });
             app.ApplicationServices.GetService<MessagesConsumer>().Register().GetAwaiter().GetResult();
+            app.UseSerilogRequestLogging();
         }
     }
 }

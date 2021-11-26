@@ -10,18 +10,19 @@ namespace CovidAppClientModule
     {
         static async Task Main(string[] args)
         {
-           //TODO
-           //add clientId, tenantId, secret token
+            //TODO
+            //add clientId, tenantId, secret token
             var app = ConfidentialClientApplicationBuilder.Create("") // client id
             .WithAuthority("") // tenant id
             .WithClientSecret("")
             .Build();
-            
-            var tokenClient = app.AcquireTokenForClient(new[] { "" });
+
+            var tokenClient = app.AcquireTokenForClient(new[] { "api://eaca2605-e312-4220-813d-97af4ebe2595/.default" });
             var result = await tokenClient.ExecuteAsync();
+
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse($"Bearer {result.AccessToken}");
-            ClientService service = new ClientService("https://localhost:5001/", httpClient);
+            CovidAppClientModule service = new CovidAppClientModule("https://localhost:5001/", httpClient);
 
             _ = service.CreatePatientAsync(new Patient
             {
@@ -39,6 +40,7 @@ namespace CovidAppClientModule
             {
                 Console.WriteLine(item.FirstName + " " + item.LastName);
             }
+            await service.InvalidAsync();
             Console.ReadLine();
         }
     }
